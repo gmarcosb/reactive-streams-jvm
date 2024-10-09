@@ -361,6 +361,10 @@ public abstract class PublisherVerification<T> implements PublisherVerificationR
             public void onSubscribe(Subscription subs) {
               onSubscribeLatch.assertOpen("Only one onSubscribe call expected");
               onSubscribeLatch.close();
+
+              // If the publisher requires a request to publish the error, that follows the spec
+              // If it does not, this should be a no-op
+              subs.request(1);
             }
             @Override
             public void onError(Throwable cause) {
@@ -527,6 +531,10 @@ public abstract class PublisherVerification<T> implements PublisherVerificationR
           public void onSubscribe(Subscription subs) {
             onSubscribeLatch.assertOpen("Only one onSubscribe call expected");
             onSubscribeLatch.close();
+
+            // If the publisher requires a request to publish the error, that follows the spec
+            // If it does not, this should be a no-op
+            subs.request(1);
           }
         };
         pub.subscribe(sub);
